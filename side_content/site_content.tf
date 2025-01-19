@@ -14,3 +14,8 @@ resource "aws_s3_object" "sample_logo_blue" {
   content_type = "image/png" 
   etag         = filemd5("${path.module}/site_content/Logo_Blue.png")
 }
+variable "deploy_sample_content" {
+  description = "Content to be deployed as a sample file"
+  type        = string
+  default     = "This is a sample content."
+}
