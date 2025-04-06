@@ -2,19 +2,6 @@
 
 This Terraform module deploys a secure static website on AWS using S3 for storage, CloudFront for CDN, ACM for SSL/TLS certificates, and Route53 for DNS management. It supports custom domains, HTTPS enforcement, and optional sample content.
 
-## Table of Contents
-
--   [Architecture Overview](#architecture-overview)
--   [Prerequisites](#prerequisites)
--   [Configuration Guide](#configuration-guide)
-    -   [Input Variables](#input-variables)
-    -   [File Structure](#file-structure)
--   [Deployment Steps](#deployment-steps)
--   [Outputs](#outputs)
--   [Custom Error Handling](#custom-error-handling)
--   [Cost Considerations](#cost-considerations)
--   [Troubleshooting](#troubleshooting)
--   [Cleanup](#cleanup)
 
 ## Architecture Overview
 
@@ -56,6 +43,42 @@ Set variables in `terraform.tfvars` or via CLI. Key variables:
 ### File Structure
 
 
+## Deployment Steps
+
+1.  **Prepare Sample Content** (Optional):
+    Create a `site_content/` directory with:
+    -   `home.html`: Your homepage.
+    -   `Logo_Blue.png`: Brand logo (optional).
+
+2.  **Initialize Terraform**:
+
+    ```bash
+    terraform init
+    ```
+
+3.  **Review Plan**:
+
+    ```bash
+    terraform plan -var="domain_name=example.com"
+    ```
+
+4.  **Deploy Infrastructure**:
+
+    ```bash
+    terraform apply -var="domain_name=example.com"
+    ```
+
+    Confirm with `yes`.
+
+5.  **Verify DNS**:
+    Ensure your domain’s NS records point to the Route53 hosted zone.
+
+## Outputs
+
+After deployment:
+
+```bash
+terraform output
 
 ## Modules
 
