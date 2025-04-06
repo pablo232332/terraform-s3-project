@@ -1,8 +1,60 @@
-# terraform-aws-static-website-s3-cloudfront-acm
+# Terraform AWS Static Website
 
-This Terraform deploys resources for a public static website using AWS S3 and Cloudfront with TLS and a public DNS entry together with a suitable ACM certificate and validation. The apex domain is aliased to the www subdomain. This is a useful base from which to deploy website content with e.g. Hugo. Optionally a sample webpage with text and an image may be deployed to demonstrate that the website is working. This code presumes that a hosted zone already exists in the same account for the domain in question - this is automatically provisioned for public domain names registered via Route53 as opposed to transferred from another provider. There are a bewilderment of options available for Cloudfront and S3. It simply isn't practical to include all possible options here. The choices made are appropriate for a personal website. 
+This Terraform module deploys a secure static website on AWS using S3 for storage, CloudFront for CDN, ACM for SSL/TLS certificates, and Route53 for DNS management. It supports custom domains, HTTPS enforcement, and optional sample content.
 
-By default 404 and 403 errors are redirected to `/index.html` but this is configurable and custom error responses may be specified as demonstrated in the accompanying  `examples/custom-error-response-and-bucket`
+## Table of Contents
+
+-   [Architecture Overview](#architecture-overview)
+-   [Prerequisites](#prerequisites)
+-   [Configuration Guide](#configuration-guide)
+    -   [Input Variables](#input-variables)
+    -   [File Structure](#file-structure)
+-   [Deployment Steps](#deployment-steps)
+-   [Outputs](#outputs)
+-   [Custom Error Handling](#custom-error-handling)
+-   [Cost Considerations](#cost-considerations)
+-   [Troubleshooting](#troubleshooting)
+-   [Cleanup](#cleanup)
+
+## Architecture Overview
+
+![AWS Architecture](https://via.placeholder.com/800x400.png?text=S3+%2B+CloudFront+%2B+Route53+Architecture)
+
+*Components:*
+
+1.  **S3 Bucket**: Stores static assets (HTML, images) with versioning and blocked public access.
+2.  **CloudFront**: Global CDN with caching, SSL/TLS, and custom error pages.
+3.  **ACM**: Manages SSL/TLS certificates for the domain.
+4.  **Route53**: DNS records for domain apex (`example.com`) and `www` redirect.
+5.  **IAM**: Security policies restricting S3 access to CloudFront only.
+
+## Prerequisites
+
+1.  **AWS Account**: With permissions for S3, CloudFront, ACM, Route53, and IAM.
+2.  **Domain Name**: Registered with Route53 hosted zone (e.g., `example.com`).
+3.  **Terraform**: Version `>= 1.5.0` installed.
+4.  **AWS CLI**: Configured with credentials (`aws configure`).
+5.  **Certificate Region**: **Critical** – ACM certificates for CloudFront must be created in `us-east-1` (N. Virginia).
+    * ⚠️ The current configuration uses `eu-central-1` (Frankfurt) for ACM, which will cause errors. Modify `providers.tf` to use `us-east-1` for ACM resources.
+
+## Configuration Guide
+
+### Input Variables
+
+Set variables in `terraform.tfvars` or via CLI. Key variables:
+
+| Variable                   | Description                                          | Default           | Required |
+| :------------------------- | :--------------------------------------------------- | :---------------- | :------- |
+| `domain_name`              | Root domain (e.g., `example.com`)                     | -                 | Yes      |
+| `cloudfront_price_class`   | CDN cost tier (`PriceClass_100`, `PriceClass_200`, etc.) | `PriceClass_100`  | No       |
+| `deploy_sample_content`    | Deploy sample `home.html` and `Logo_Blue.png`           | `false`           | No       |
+| `s3_bucket_versioning`     | Enable S3 bucket versioning                            | `false`           | No       |
+| `cloudfront_min_ttl`       | Minimum cache TTL (seconds)                            | `0`               | No       |
+
+**Full list**: See [variables.tf](./variables.tf).
+
+### File Structure
+
 
 
 ## Modules
