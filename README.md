@@ -5,7 +5,6 @@ This Terraform module deploys a secure static website on AWS using S3 for storag
 
 ## Architecture Overview
 
-![AWS Architecture](https://via.placeholder.com/800x400.png?text=S3+%2B+CloudFront+%2B+Route53+Architecture)
 
 *Components:*
 
