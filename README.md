@@ -73,12 +73,7 @@ Set variables in `terraform.tfvars` or via CLI. Key variables:
 5.  **Verify DNS**:
     Ensure your domain’s NS records point to the Route53 hosted zone.
 
-## Outputs
 
-After deployment:
-
-```bash
-terraform output
 
 ## Modules
 
