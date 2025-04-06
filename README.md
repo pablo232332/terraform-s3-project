@@ -3,27 +3,44 @@
 This Terraform module deploys a secure static website on AWS using S3 for storage, CloudFront for CDN, ACM for SSL/TLS certificates, and Route53 for DNS management. It supports custom domains, HTTPS enforcement, and optional sample content.
 
 
-## Architecture Overview
+## Key Features
+
+* **Automated Deployment:** Uses Terraform to provision and configure all necessary AWS resources.
+* **Static Website Hosting:** Hosts website files in an Amazon S3 bucket.
+* **Content Delivery Network (CDN):** Utilizes Amazon CloudFront for fast content delivery and caching.
+* **HTTPS Support:** Enables secure connections with HTTPS via an AWS Certificate Manager (ACM) certificate.
+* **Custom Domain Configuration:** Configures DNS settings in Amazon Route 53 to use your own domain.
+* **Domain Aliases:** Supports multiple domain names for your website.
+* **"www" Redirection:** Automatically redirects traffic from the "www" subdomain to the main domain (or vice versa, depending on configuration).
+* **SSL Certificate Generation and Validation:** Handles the creation and validation of the necessary SSL certificate.
+* **Restricted S3 Bucket Access:** Configures the S3 bucket with appropriate permissions to ensure security.
+* **Example Content Deployment (Optional):** Allows for the deployment of sample HTML and image files.
+* **Custom Error Page Configuration:** Enables the configuration of custom error pages for a better user experience.
+* **Security Policy Configuration:** Provides options to configure security policies for the deployed resources.
+
+## Architecture
+
+The following AWS services are utilized by these Terraform files:
+
+* **Amazon S3:** For storing the static website files.
+* **Amazon CloudFront:** As a CDN to cache and distribute the website content globally.
+* **AWS Certificate Manager (ACM):** To provision and manage the SSL/TLS certificate for HTTPS.
+* **Amazon Route 53:** For managing DNS records and routing traffic to the CloudFront distribution.
 
 
-*Components:*
+## Configuration
 
-1.  **S3 Bucket**: Stores static assets (HTML, images) with versioning and blocked public access.
-2.  **CloudFront**: Global CDN with caching, SSL/TLS, and custom error pages.
-3.  **ACM**: Manages SSL/TLS certificates for the domain.
-4.  **Route53**: DNS records for domain apex (`example.com`) and `www` redirect.
-5.  **IAM**: Security policies restricting S3 access to CloudFront only.
+The module offers various configuration options that can be set through Terraform variables. These include:
 
-## Prerequisites
+* Domain name
+* AWS region
+* Whether to deploy example content
+* Custom error page settings
+* Security policy configurations
 
-1.  **AWS Account**: With permissions for S3, CloudFront, ACM, Route53, and IAM.
-2.  **Domain Name**: Registered with Route53 hosted zone (e.g., `example.com`).
-3.  **Terraform**: Version `>= 1.5.0` installed.
-4.  **AWS CLI**: Configured with credentials (`aws configure`).
-5.  **Certificate Region**: **Critical** – ACM certificates for CloudFront must be created in `us-east-1` (N. Virginia).
-    * ⚠️ The current configuration uses `eu-central-1` (Frankfurt) for ACM, which will cause errors. Modify `providers.tf` to use `us-east-1` for ACM resources.
+Refer to the `variables.tf` file for a complete list of available variables and their descriptions.
 
-## Configuration Guide
+
 
 ### Input Variables
 
@@ -39,7 +56,9 @@ Set variables in `terraform.tfvars` or via CLI. Key variables:
 
 **Full list**: See [variables.tf](./variables.tf).
 
-### File Structure
+## Usage
+
+Once the deployment is complete, you can upload your static website files to the designated S3 bucket. The CloudFront distribution will automatically pick up the changes and serve your website.
 
 
 ## Deployment Steps
